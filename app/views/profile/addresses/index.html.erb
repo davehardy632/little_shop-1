@@ -8,5 +8,7 @@
   <p>State: <%= address.state %></p>
   <p>Zip Code: <%= address.zip %></p>
   <p>Status: <%= address.nickname %></p>
+  <%= link_to "Edit Address", edit_profile_address_path(address) %>
+  <%= link_to "Delete Address", profile_address_path(address), method: :delete %>
 </div>
 <% end %>
