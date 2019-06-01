@@ -38,6 +38,13 @@ class Profile::AddressesController < ApplicationController
     end
   end
 
+  def destroy
+    @address = Address.find(params[:id])
+    @address.delete
+    flash[:message] = "Address has been deleted"
+    redirect_to profile_addresses_path
+  end
+
   private
 
   def address_params
