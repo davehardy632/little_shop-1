@@ -16,16 +16,22 @@ RSpec.describe OrderItem, type: :model do
 
   describe 'instance methods' do
     it '.subtotal' do
-      oi = create(:order_item, quantity: 5, price: 3)
+      user = create(:user)
+      address = Address.create(address: "1211 west 24th ave", city: "Denver", state: "CO", zip: "21112", nickname: "work", user: user)
+      order = Order.create(user: user, address: address, status: "pending")
+      oi = create(:order_item, quantity: 5, price: 3, order: order)
 
       expect(oi.subtotal).to eq(15)
     end
 
     it '.fulfill' do
+      user = create(:user)
+      address = Address.create(address: "1211 west 24th ave", city: "Denver", state: "CO", zip: "21112", nickname: "work", user: user)
+      order = Order.create(user: user, address: address, status: "pending")
       item = create(:item, inventory:2)
-      oi1 = create(:order_item, quantity: 1, item: item)
-      oi2 = create(:order_item, quantity: 1, item: item)
-      oi3 = create(:order_item, quantity: 1, item: item)
+      oi1 = create(:order_item, quantity: 1, item: item, order: order)
+      oi2 = create(:order_item, quantity: 1, item: item, order: order)
+      oi3 = create(:order_item, quantity: 1, item: item, order: order)
 
       oi1.fulfill
 
@@ -50,9 +56,12 @@ RSpec.describe OrderItem, type: :model do
 
     it 'inventory_available' do
       item = create(:item, inventory:2)
-      oi1 = create(:order_item, quantity: 1, item: item)
-      oi2 = create(:order_item, quantity: 2, item: item)
-      oi3 = create(:order_item, quantity: 3, item: item)
+      user = create(:user)
+      address = Address.create(address: "1211 west 24th ave", city: "Denver", state: "CO", zip: "21112", nickname: "work", user: user)
+      order = Order.create(user: user, address: address, status: "pending")
+      oi1 = create(:order_item, quantity: 1, item: item, order: order)
+      oi2 = create(:order_item, quantity: 2, item: item, order: order)
+      oi3 = create(:order_item, quantity: 3, item: item, order: order)
 
       expect(oi1.inventory_available).to eq(true)
       expect(oi2.inventory_available).to eq(true)

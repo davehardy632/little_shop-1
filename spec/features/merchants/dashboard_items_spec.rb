@@ -10,7 +10,11 @@ RSpec.describe 'Merchant Dashboard Items page' do
     @items = create_list(:item, 3, user: @merchant)
     @items << create(:inactive_item, user: @merchant)
 
-    @order = create(:shipped_order)
+    user = create(:user)
+    @address = user.addresses.create(address: "1221 west 23rd ave", city: "Denver", state: "CO", zip: "21112")
+
+    @order = Order.create(user: user, address: @address, status: "shipped")
+    # @order = create(:shipped_order)
     @oi_1 = create(:fulfilled_order_item, order: @order, item: @items[0], price: 1, quantity: 1, created_at: 2.hours.ago, updated_at: 50.minutes.ago)
   end
 

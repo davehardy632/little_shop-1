@@ -7,9 +7,10 @@
         <%= merchant.name %>
       <% end %>
     <% end %>
-    <p><%= merchant.city %>, <%= merchant.state %></p>
-    <p>Registered Date: <%= merchant.created_at %><br/>
-
+    <% merchant.addresses.each do |address| %>
+    <p><%= address.city %>, <%= address.state %></p>
+    <p>Registered Date: <%= address.created_at %><br/>
+    <% end %>
     <% if current_admin? %>
     <p>
     <% if merchant.active %>

@@ -5,9 +5,15 @@ RSpec.describe "Merchant index page" do
     @merchant = create(:merchant)
     @item_1, @item_2 = create_list(:item, 2, user: @merchant)
     @item_3 = create(:inactive_item, user: @merchant)
-    @order_1, @order_2 = create_list(:order, 2)
-    @order_3 = create(:shipped_order)
-    @order_4 = create(:cancelled_order)
+
+
+    @user = create(:user)
+    @address = @user.addresses.create(address: "1221 west 23rd ave", city: "Denver", state: "CO", zip: "21112")
+    @order_1 = Order.create(user: @user, address: @address, status: "pending")
+    @order_2 = Order.create(user: @user, address: @address, status: "pending")
+    @order_3 = Order.create(user: @user, address: @address, status: "shipped")
+    @order_4 = Order.create(user: @user, address: @address, status: "cancelled")
+
     create(:order_item, order: @order_1, item: @item_1, quantity: 1, price: 2)
     create(:order_item, order: @order_1, item: @item_2, quantity: 2, price: 2)
     create(:order_item, order: @order_2, item: @item_2, quantity: 4, price: 2)
