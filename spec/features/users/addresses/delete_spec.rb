@@ -11,7 +11,7 @@ describe "User can delete an address from their address page in their profile" d
 
     visit profile_addresses_path
     within("#address-#{@address_1.id}") do
-      click_link "Delete Address" 
+      click_link "Delete Address"
     end
   end
 

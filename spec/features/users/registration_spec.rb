@@ -23,6 +23,7 @@ RSpec.describe 'the registration page' do
       expect(page).to have_content("Registration Successful! You are now logged in.")
       expect(page).to have_content("Logged in as #{user.name}")
       expect(address.address).to eq("address")
+      expect(address.nickname).to eq("home")
     end
   end
 
