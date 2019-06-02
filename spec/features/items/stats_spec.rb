@@ -9,8 +9,9 @@ RSpec.describe 'items index stats', type: :feature do
     merchant = create(:merchant)
     items = create_list(:item, 7, user: merchant)
     user = create(:user)
+    address = user.addresses.create(address: "1221 west 23rd ave", city: "Denver", state: "CO", zip: "21112")
+    order = Order.create(user: user, address: address, status: "shipped")
 
-    order = create(:shipped_order, user: user)
     create(:fulfilled_order_item, order: order, item: items[3], quantity: 7) # Name 4
     create(:fulfilled_order_item, order: order, item: items[1], quantity: 6) # Name 2
     create(:fulfilled_order_item, order: order, item: items[0], quantity: 5) # Name 1

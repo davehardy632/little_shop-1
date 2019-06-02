@@ -6,10 +6,15 @@ RSpec.describe 'Admin Order workflow', type: :feature do
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@admin)
 
     user_1, user_2, user_3, user_4 = create_list(:user, 4)
-    @order_1 = create(:order, user: user_1)
-    @order_2 = create(:packaged_order, user: user_2)
-    @order_3 = create(:shipped_order, user: user_3)
-    @order_4 = create(:cancelled_order, user: user_4)
+    address_1 = user_1.addresses.create(address: "1221 west 23rd ave", city: "Denver", state: "CO", zip: "21112")
+    address_2 = user_2.addresses.create(address: "8854 east 27th ave", city: "Austin", state: "TX", zip: "21235")
+    address_3 = user_3.addresses.create(address: "3223 Main blvd", city: "Des Moines", state: "IA", zip: "81664")
+    address_4 = user_4.addresses.create(address: "7765 north 15th st", city: "Little Rock", state: "AK", zip: "90443")
+
+    @order_1 = Order.create(user: user_1, address: address_1, status: "pending")
+    @order_2 = Order.create(user: user_2, address: address_2, status: "packaged")
+    @order_3 = Order.create(user: user_3, address: address_3, status: "shipped")
+    @order_4 = Order.create(user: user_4, address: address_4, status: "cancelled")
   end
   describe 'admin order index page' do
     it 'shows all orders, ship button, etc' do

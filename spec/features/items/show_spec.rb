@@ -4,10 +4,16 @@ RSpec.describe "item show page" do
   before :each do
     @merchant = create(:merchant)
     @item = create(:item, user: @merchant)
-    @order_item_1 = create(:fulfilled_order_item, item: @item, created_at: 4.days.ago, updated_at: 12.hours.ago)
-    @order_item_2 = create(:fulfilled_order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago)
-    @order_item_3 = create(:fulfilled_order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago)
-    @order_item_4 = create(:order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago)
+
+
+    @user = create(:user)
+    @address = @user.addresses.create(address: "1221 west 23rd ave", city: "Denver", state: "CO", zip: "21112")
+    @order = Order.create(user: @user, address: @address, status: "pending")
+
+    @order_item_1 = create(:fulfilled_order_item, item: @item, created_at: 4.days.ago, updated_at: 12.hours.ago, order: @order)
+    @order_item_2 = create(:fulfilled_order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago, order: @order)
+    @order_item_3 = create(:fulfilled_order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago, order: @order)
+    @order_item_4 = create(:order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago, order: @order)
   end
 
   it "displays the items info" do
@@ -28,7 +34,7 @@ RSpec.describe "item show page" do
   end
 
   it "shows rounded down average fulfillment time" do
-    create(:fulfilled_order_item, item: @item, created_at: 4.days.ago, updated_at: 1.day.ago)
+    create(:fulfilled_order_item, item: @item, created_at: 4.days.ago, updated_at: 1.day.ago, order: @order)
     visit item_path(@item)
 
     expect(page).to have_content("Average Fulfillment Time: 2 days")
@@ -37,7 +43,7 @@ RSpec.describe "item show page" do
   it "displays no average fulfillment time if there are no order items" do
     merchant = create(:merchant)
     item = create(:item, user: merchant)
-    order_item_4 = create(:order_item, item: item, created_at: 2.days.ago, updated_at: 1.day.ago)
+    order_item_4 = create(:order_item, item: item, created_at: 2.days.ago, updated_at: 1.day.ago, order: @order)
     visit item_path(item)
 
     expect(page).to_not have_content("Average Fulfillment Time:")
