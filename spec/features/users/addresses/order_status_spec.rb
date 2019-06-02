@@ -29,6 +29,7 @@ describe "A user cannot delete an address if it has been used in a completed ord
 
     within("#address-#{@address_1.id}") do
       expect(page).to_not have_link("Delete Address")
+      expect(page).to_not have_link("Edit Address")
     end
   end
 end
