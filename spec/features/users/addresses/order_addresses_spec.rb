@@ -22,21 +22,21 @@ describe "When a user checks out, they can choose which address to ship to on th
       end
     end
 
-    it "At checkout a user sees all addresses to send an order to" do
+  it "At checkout a user sees all addresses to send an order to" do
 
 
-      expect(current_path).to eq(cart_path)
+    expect(current_path).to eq(cart_path)
 
-      expect(page).to have_button("Check Out With Address: #{@address_1.nickname}")
-      expect(page).to have_button("Check Out With Address: #{@address_2.nickname}")
-      expect(page).to have_button("Check Out With Address: #{@address_3.nickname}")
+    expect(page).to have_button("Check Out With Address: #{@address_1.nickname}")
+    expect(page).to have_button("Check Out With Address: #{@address_2.nickname}")
+    expect(page).to have_button("Check Out With Address: #{@address_3.nickname}")
 
-      click_on "Check Out With Address: #{@address_1.nickname}"
+    click_on "Check Out With Address: #{@address_1.nickname}"
 
-      order = Order.last
+    order = Order.last
 
-      expect(current_path).to eq(profile_orders_path)
-      expect(page).to have_content("Shipping to: #{@address_1.nickname} address at #{@address_1.address}")
-      expect(order.address.nickname).to eq(@address_1.nickname)
-    end
+    expect(current_path).to eq(profile_orders_path)
+    expect(page).to have_content("Shipping to: #{@address_1.nickname} address at #{@address_1.address}")
+    expect(order.address.nickname).to eq(@address_1.nickname)
   end
+end
