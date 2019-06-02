@@ -16,11 +16,11 @@ ActiveRecord::Schema.define(version: 20190601205421) do
   enable_extension "plpgsql"
 
   create_table "addresses", force: :cascade do |t|
-    t.string "address_line"
+    t.string "address"
     t.string "city"
     t.string "state"
     t.string "zip"
-    t.string "nickname"
+    t.string "nickname", default: "home"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -66,15 +66,9 @@ ActiveRecord::Schema.define(version: 20190601205421) do
     t.integer "role", default: 0
     t.boolean "active", default: true
     t.string "name"
-    t.string "address"
-    t.string "city"
-    t.string "state"
-    t.string "zip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["city"], name: "index_users_on_city"
     t.index ["email"], name: "index_users_on_email"
-    t.index ["state"], name: "index_users_on_state"
   end
 
   add_foreign_key "addresses", "users"

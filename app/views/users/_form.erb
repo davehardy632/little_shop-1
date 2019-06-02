@@ -4,25 +4,28 @@
   <%= f.text_field :name %>
 </p>
 
+<%= fields_for @address do |fa| %>
+
 <p>
-  <%= f.label :address %>:
-  <%= f.text_field :address %>
+  <%= fa.label :address %>:
+  <%= fa.text_field :address %>
 </p>
 
 <p>
-  <%= f.label :city %>:
-  <%= f.text_field :city %>
+  <%= fa.label :city %>:
+  <%= fa.text_field :city %>
 </p>
 
 <p>
-  <%= f.label :state %>:
-  <%= f.text_field :state %>
+  <%= fa.label :state %>:
+  <%= fa.text_field :state %>
 </p>
 
 <p>
-  <%= f.label :zip %>:
-  <%= f.text_field :zip %>
+  <%= fa.label :zip %>:
+  <%= fa.text_field :zip %>
 </p>
+<% end %>
 
 <p>
   <%= f.label :email %>:
