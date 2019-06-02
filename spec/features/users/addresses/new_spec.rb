@@ -3,12 +3,11 @@ require 'rails_helper'
 describe "User can add a new address to their profile" do
   before :each do
     @user = create(:user)
+    login_as(@user)
 
-    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user)
-
-      @address_1 = @user.addresses.create(address_line: "1211 west 16th st", city: "Denver", state: "CO", zip: "80104",  nickname: "Home")
-      @address_2 = @user.addresses.create(address_line: "2033 north larimer st", city: "Chicago", state: "IL", zip: "80204", nickname: "Work")
-      @address_3 = @user.addresses.create(address_line: "2244 blake st", city: "Boston", state: "MA", zip: "80304", nickname: "Other")
+      @address_1 = @user.addresses.create(address: "1211 west 16th st", city: "Denver", state: "CO", zip: "80104",  nickname: "Home")
+      @address_2 = @user.addresses.create(address: "2033 north larimer st", city: "Chicago", state: "IL", zip: "80204", nickname: "Work")
+      @address_3 = @user.addresses.create(address: "2244 blake st", city: "Boston", state: "MA", zip: "80304", nickname: "Other")
   end
   describe "When I visit my addresses" do
     it "I click add an address, fill out form, and new address is displayed on my addresses index" do
@@ -19,7 +18,7 @@ describe "User can add a new address to their profile" do
 
       expect(current_path).to eq(new_profile_address_path)
 
-      fill_in "Address line", with: "1211 hedge lane"
+      fill_in "Address", with: "1211 hedge lane"
       fill_in "City", with: "St Louis"
       fill_in "State", with: "Missouri"
       fill_in "Zip", with: "52991"

@@ -15,7 +15,7 @@ class Profile::AddressesController < ApplicationController
     @address = Address.new(address_params)
     @user.addresses << @address
     if @address.save
-      flash[:message] = "Your address at #{@address.address_line} has been saved"
+      flash[:message] = "Your address at #{@address.address} has been saved"
       redirect_to profile_addresses_path
     else
       render :new
@@ -29,7 +29,7 @@ class Profile::AddressesController < ApplicationController
   def update
     @address = Address.find(params[:id])
     if @address.update(address_params)
-      flash[:success] = "Your address at #{@address.address_line} has been updated!"
+      flash[:success] = "Your address at #{@address.address} has been updated!"
       redirect_to profile_addresses_path
     else
       flash[:danger] = @address.errors.full_messages
@@ -48,7 +48,7 @@ class Profile::AddressesController < ApplicationController
   private
 
   def address_params
-    params.require(:address).permit(:address_line, :city, :state, :zip, :nickname)
+    params.require(:address).permit(:address, :city, :state, :zip, :nickname)
   end
 
 end
