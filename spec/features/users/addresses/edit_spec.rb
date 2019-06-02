@@ -68,7 +68,7 @@ describe "User can edit an address from their address page in their profile" do
         expect(page).to have_content("City can't be blank")
         expect(page).to have_content("State can't be blank")
         expect(page).to have_content("Zip can't be blank")
-        expect(page).to have_content("Nickname can't be blank")
+
       end
       it "prepopulates fields when update is unsucessfull" do
         fill_in "Address", with: ""

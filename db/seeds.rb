@@ -11,6 +11,7 @@ admin = create(:admin)
 user = create(:user)
 merchant_1 = create(:merchant)
 
+admin = create(:admin, name: "admin", email: "adminemail@gmail.com", password: "password")
 merchant_2, merchant_3, merchant_4 = create_list(:merchant, 3)
 
 inactive_merchant_1 = create(:inactive_merchant)
