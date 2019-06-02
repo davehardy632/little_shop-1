@@ -10,5 +10,6 @@ describe Address do
   end
   describe "relationships" do
     it {should belong_to :user}
+    it {should have_many :orders}
   end
 end
