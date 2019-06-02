@@ -53,12 +53,29 @@ RSpec.describe User, type: :model do
 
   describe 'instance methods' do
     before :each do
-      @u1 = create(:user, state: "CO", city: "Anywhere")
-      @u2 = create(:user, state: "OK", city: "Tulsa")
-      @u3 = create(:user, state: "IA", city: "Anywhere")
-      u4 = create(:user, state: "IA", city: "Des Moines")
-      u5 = create(:user, state: "IA", city: "Des Moines")
-      u6 = create(:user, state: "IA", city: "Des Moines")
+      # @u1 = create(:user, state: "CO", city: "Anywhere")
+      @u1 = User.create(name: "user", email: "user@gmail.com", password: "password")
+      @address_1 = @u1.addresses.create(address: "1121 west 32nd ave", city: "Anywhere", state: "CO", zip: "22122")
+      # @u2 = create(:user, state: "OK", city: "Tulsa")
+      @u2 = User.create(name: "user 2", email: "user2@gmail.com", password: "password2")
+      @address_2 = @u2.addresses.create(address: "1441 north 30th ave", city: "Tulsa", state: "OK", zip: "22332")
+
+      # @u3 = create(:user, state: "IA", city: "Anywhere")
+      @u3 = User.create(name: "user 3", email: "user3@gmail.com", password: "password3")
+      @address_3 = @u3.addresses.create(address: "1155 east 22nd ave", city: "Anywhere", state: "IA", zip: "11312")
+
+      # u4 = create(:user, state: "IA", city: "Des Moines")
+      u4 = User.create(name: "user 4", email: "user4@gmail.com", password: "password4")
+      address_4 = u4.addresses.create(address: "1521 west 44th ave", city: "Des Moines", state: "IA", zip: "24532")
+
+      # u5 = create(:user, state: "IA", city: "Des Moines")
+      u5 = User.create(name: "user 5", email: "user5@gmail.com", password: "password5")
+      address_5 = u5.addresses.create(address: "1321 west 11th ave", city: "Des Moines", state: "IA", zip: "22652")
+
+      # u6 = create(:user, state: "IA", city: "Des Moines")
+      u6 = User.create(name: "user 6", email: "user6@gmail.com", password: "password6")
+      address_6 = u6.addresses.create(address: "1661 west 26th ave", city: "Des Moines", state: "IA", zip: "56332")
+
 
       @m1 = create(:merchant)
       @i1 = create(:item, merchant_id: @m1.id, inventory: 20)
@@ -74,13 +91,30 @@ RSpec.describe User, type: :model do
       @m2 = create(:merchant)
       @i10 = create(:item, merchant_id: @m2.id, inventory: 20)
 
-      o1 = create(:shipped_order, user: @u1)
-      o2 = create(:shipped_order, user: @u2)
-      o3 = create(:shipped_order, user: @u3)
-      o4 = create(:shipped_order, user: @u1)
-      o5 = create(:shipped_order, user: @u1)
-      o6 = create(:cancelled_order, user: u5)
-      o7 = create(:order, user: u6)
+
+      #
+      # @address_1 = @u1.addresses.create(address: "1121 west 32nd ave", city: "Anywhere", state: "CO", zip: "22122")
+      # @address_2 = @u2.addresses.create(address: "1441 north 30th ave", city: "Tulsa", state: "OK", zip: "22332")
+      # @address_3 = @u3.addresses.create(address: "1155 east 22nd ave", city: "Anywhere", state: "IA", zip: "11312")
+      # address_4 = u4.addresses.create(address: "1521 west 44th ave", city: "Des Moines", state: "IA", zip: "24532")
+      # address_5 = u5.addresses.create(address: "1321 west 11th ave", city: "Des Moines", state: "IA", zip: "22652")
+      # address_6 = u6.addresses.create(address: "1661 west 26th ave", city: "Des Moines", state: "IA", zip: "56332")
+
+      # o1 = create(:shipped_order, user: @u1, address: @address_1)
+      o1 = Order.create(user: @u1, address: @address_1, status: "shipped")
+        # o2 = create(:shipped_order, user: @u2, address: @address_2)
+      o2 = Order.create(user: @u2, address: @address_2, status: "shipped")
+      # o3 = create(:shipped_order, user: @u3, address: @address_3)
+      o3 = Order.create(user: @u3, address: @address_3, status: "shipped")
+      # o4 = create(:shipped_order, user: @u1, address: @address_1)
+      o4 = Order.create(user: @u1, address: @address_1, status: "shipped")
+      # o5 = create(:shipped_order, user: @u1, address: @address_1)
+      o5 = Order.create(user: @u1, address: @address_1, status: "shipped")      
+      # o6 = create(:cancelled_order, user: u5)
+      o6 = Order.create(user: u5, address: address_5, status: "cancelled")
+      # o7 = create(:order, user: u6)
+      o7 = Order.create(user: u6, address: address_6, status: "pending")
+
       @oi1 = create(:order_item, item: @i1, order: o1, quantity: 2, created_at: 1.days.ago)
       @oi2 = create(:order_item, item: @i2, order: o2, quantity: 8, created_at: 7.days.ago)
       @oi3 = create(:order_item, item: @i2, order: o3, quantity: 6, created_at: 7.days.ago)

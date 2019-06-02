@@ -21,8 +21,9 @@ RSpec.describe Item, type: :model do
         merchant = create(:merchant)
         @items = create_list(:item, 6, user: merchant)
         user = create(:user)
+        address = user.addresses.create(address: "1221 west 22nd ave")
 
-        order = create(:shipped_order, user: user)
+        order = Order.create(status: "shipped", address: address, user: user)
         create(:fulfilled_order_item, order: order, item: @items[3], quantity: 7)
         create(:fulfilled_order_item, order: order, item: @items[1], quantity: 6)
         create(:fulfilled_order_item, order: order, item: @items[0], quantity: 5)
@@ -54,10 +55,13 @@ RSpec.describe Item, type: :model do
     before :each do
       @merchant = create(:merchant)
       @item = create(:item, user: @merchant)
-      @order_item_1 = create(:fulfilled_order_item, item: @item, created_at: 4.days.ago, updated_at: 12.hours.ago)
-      @order_item_2 = create(:fulfilled_order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago)
-      @order_item_3 = create(:fulfilled_order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago)
-      @order_item_4 = create(:order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago)
+      @user = create(:user)
+      @address = Address.create(address: "1211 west 24th ave", city: "Denver", state: "CO", zip: "21112", nickname: "work", user: @user)
+      @order = Order.create(user: @user, address: @address, status: "pending")
+      @order_item_1 = create(:fulfilled_order_item, item: @item, created_at: 4.days.ago, updated_at: 12.hours.ago, order: @order)
+      @order_item_2 = create(:fulfilled_order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago, order: @order)
+      @order_item_3 = create(:fulfilled_order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago, order: @order)
+      @order_item_4 = create(:order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago, order: @order)
     end
 
     describe "#average_fulfillment_time" do
@@ -67,7 +71,7 @@ RSpec.describe Item, type: :model do
 
       it "returns nil when there are no order_items" do
         unfulfilled_item = create(:item, user: @merchant)
-        unfulfilled_order_item = create(:order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago)
+        unfulfilled_order_item = create(:order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago, order: @order)
 
         expect(unfulfilled_item.average_fulfillment_time).to be_falsy
       end

@@ -44,13 +44,13 @@ class User < ApplicationRecord
 
   def top_states_by_items_shipped(limit)
     items.joins(:order_items)
-         .joins('join orders on orders.id = order_items.order_id')
-         .joins('join users on users.id = orders.user_id')
-         .where(order_items: {fulfilled: true}, orders: {status: :shipped})
-         .group('users.state')
-         .select('users.state, sum(order_items.quantity) AS quantity')
-         .order('quantity DESC')
-         .limit(limit)
+      .joins('join orders on orders.id = order_items.order_id')
+      .joins('join addresses on addresses.id = orders.address_id')
+      .where(order_items: {fulfilled: true}, orders: {status: :shipped})
+      .group('addresses.state')
+      .select('addresses.state, sum(order_items.quantity) AS quantity')
+      .order('quantity DESC')
+      .limit(limit)
   end
 
   def top_cities_by_items_shipped(limit)
