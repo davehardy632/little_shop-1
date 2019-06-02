@@ -23,6 +23,7 @@ RSpec.describe "Checking out" do
   context "as a logged in regular user" do
     before :each do
       user = create(:user)
+        address = user.addresses.create(address: "1221 west 23rd ave", city: "Denver", state: "CO", zip: "21112")
       login_as(user)
       visit cart_path
 

@@ -5,6 +5,8 @@ RSpec.describe 'User Order workflow', type: :feature do
     @user = create(:user)
     @admin = create(:admin)
 
+    @address = @user.addresses.create(address: "1221 west 23rd ave", city: "Denver", state: "CO", zip: "21112")
+
     @merchant_1 = create(:merchant)
     @merchant_2 = create(:merchant)
 
@@ -13,15 +15,15 @@ RSpec.describe 'User Order workflow', type: :feature do
     @item_1 = create(:item, user: @merchant_1)
     @item_2 = create(:item, user: @merchant_2, inventory: @inventory_level)
 
-    @order_1 = create(:order, user: @user, created_at: 1.day.ago)
+    @order_1 = Order.create(user: @user, address: @address, status: "pending", created_at: 1.day.ago)
     @oi_1 = create(:order_item, order: @order_1, item: @item_1, price: 1, quantity: 1, created_at: 1.day.ago)
     @oi_2 = create(:fulfilled_order_item, order: @order_1, item: @item_2, price: 2, quantity: @purchased_amount, created_at: 1.day.ago, updated_at: 2.hours.ago)
 
-    @order_2 = create(:packaged_order, user: @user, created_at: 1.day.ago)
+    @order_2 = Order.create(user: @user, address: @address, status: "packaged", created_at: 1.day.ago)
     @oi_1 = create(:order_item, order: @order_2, item: @item_1, price: 1, quantity: 1, created_at: 1.day.ago)
     @oi_2 = create(:fulfilled_order_item, order: @order_2, item: @item_2, price: 2, quantity: @purchased_amount, created_at: 1.day.ago, updated_at: 2.hours.ago)
 
-    @order_3 = create(:shipped_order, user: @user, created_at: 1.day.ago)
+    @order_3 = Order.create(user: @user, address: @address, status: "shipped", created_at: 1.day.ago)
     @oi_1 = create(:fulfilled_order_item, order: @order_3, item: @item_1, price: 1, quantity: 1, created_at: 1.day.ago, updated_at: 5.hours.ago)
     @oi_2 = create(:fulfilled_order_item, order: @order_3, item: @item_2, price: 2, quantity: 1, created_at: 1.day.ago, updated_at: 2.hours.ago)
 

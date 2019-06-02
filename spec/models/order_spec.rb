@@ -19,16 +19,27 @@ RSpec.describe Order, type: :model do
       @item_2 = create(:item)
       yesterday = 1.day.ago
 
-      @order = create(:order, user: user, created_at: yesterday)
+      @address = Address.create(address: "1211 west 24th ave", city: "Denver", state: "CO", zip: "21112", nickname: "work", user: user)
+
+      @order = Order.create(user: user, address: @address, status: "pending", created_at: yesterday)
+      # @order = create(:order, user: user, created_at: yesterday, address: @address)
       @oi_1 = create(:order_item, order: @order, item: @item_1, price: 1, quantity: 1, created_at: yesterday, updated_at: yesterday)
       @oi_2 = create(:fulfilled_order_item, order: @order, item: @item_2, price: 2, quantity: 1, created_at: yesterday, updated_at: 2.hours.ago)
 
       @merchant = create(:merchant)
       @i1, @i2 = create_list(:item, 2, user: @merchant)
-      @o1, @o2 = create_list(:order, 2)
-      @o3 = create(:packaged_order)
-      @o4 = create(:shipped_order)
-      @o5 = create(:cancelled_order)
+      # @o1, @o2 = create_list(:order, 2, address: @address)
+
+      @o1 = Order.create(user: user, address: @address, status: "pending")
+      @o2 = Order.create(user: user, address: @address, status: "pending")
+
+
+      # @o3 = create(:packaged_order)
+      @o3 = Order.create(user: user, address: @address, status: "packaged")
+      # @o4 = create(:shipped_order)
+      @o4 = Order.create(user: user, address: @address, status: "shipped")
+      # @o5 = create(:cancelled_order)
+      @o5 = Order.create(user: user, address: @address, status: "cancelled")
       create(:order_item, order: @o1, item: @i1, quantity: 1, price: 2)
       create(:order_item, order: @o1, item: @i2, quantity: 2, price: 2)
       create(:order_item, order: @o2, item: @i2, quantity: 4, price: 2)
@@ -49,30 +60,57 @@ RSpec.describe Order, type: :model do
   describe 'class methods' do
     before :each do
       user = create(:user)
+      @address = Address.create(address: "1211 west 24th ave", city: "Denver", state: "CO", zip: "21112", nickname: "work", user: user)
+
       @merchant = create(:merchant)
       @i1, @i2 = create_list(:item, 2, user: @merchant)
 
-      @o1, @o2, @o3, @o4, @o5 = create_list(:shipped_order, 5, user: user)
+      # @o1, @o2, @o3, @o4, @o5 = create_list(:shipped_order, 5, user: user)
+
+      @o1 = Order.create(user: user, address: @address, status: "shipped")
+      @o2 = Order.create(user: user, address: @address, status: "shipped")
+      @o3 = Order.create(user: user, address: @address, status: "shipped")
+      @o4 = Order.create(user: user, address: @address, status: "shipped")
+      @o5 = Order.create(user: user, address: @address, status: "shipped")
+
+
+
+
+
       oi1 = create(:fulfilled_order_item, order: @o1)
       oi2 = create(:fulfilled_order_item, order: @o2)
       oi3 = create(:fulfilled_order_item, order: @o3)
       oi4 = create(:fulfilled_order_item, order: @o4)
       oi5 = create(:fulfilled_order_item, order: @o5)
 
-      @o6 = create(:shipped_order, user: user)
+      # @o6 = create(:shipped_order, user: user)
+      @o6 = Order.create(user: user, address: @address, status: "shipped")
       oi2 = create(:fulfilled_order_item, order: @o6)
 
-      @o7, @o8 = create_list(:order, 2, user: user)
+      # @o7, @o8 = create_list(:order, 2, user: user)
+      @o7 = Order.create(user: user, address: @address, status: "pending")
+      @o8 = Order.create(user: user, address: @address, status: "pending")
       create(:order_item, order: @o7, item: @i1)
       create(:order_item, order: @o7)
       create(:order_item, order: @o8, item: @i2)
 
-      @packaged_orders = create_list(:packaged_order, 3, user: user)
+      # @packaged_orders = create_list(:packaged_order, 3, user: user)
+      @op1 = Order.create(user: user, address: @address, status: "packaged")
+      @op2 = Order.create(user: user, address: @address, status: "packaged")
+      @op3 = Order.create(user: user, address: @address, status: "packaged")
+
+      @packaged_orders = [@op1, @op2, @op3]
+
       create(:fulfilled_order_item, order: @packaged_orders[0])
       create(:fulfilled_order_item, order: @packaged_orders[1])
       create(:fulfilled_order_item, order: @packaged_orders[2])
 
-      @cancelled_orders = create_list(:cancelled_order, 2, user: user)
+      # @cancelled_orders = create_list(:cancelled_order, 2, user: user)
+      @oc1 = Order.create(user: user, address: @address, status: "cancelled")
+      @oc2 = Order.create(user: user, address: @address, status: "cancelled")
+
+      @cancelled_orders = [@oc1, @oc2]
+
       create(:order_item, order: @cancelled_orders[0])
       create(:order_item, order: @cancelled_orders[1])
     end
@@ -108,19 +146,26 @@ RSpec.describe Order, type: :model do
   describe 'instance methods' do
     before :each do
       user = create(:user)
+      @address = Address.create(address: "1211 west 24th ave", city: "Denver", state: "CO", zip: "21112", nickname: "work", user: @user)
       @item_1 = create(:item)
       @item_2 = create(:item)
       yesterday = 1.day.ago
 
-      @order = create(:order, user: user, created_at: yesterday)
+      # @order = create(:order, user: user, created_at: yesterday)
+      @order = Order.create(user: user, address: @address, status: "pending", created_at: yesterday)
       @oi_1 = create(:order_item, order: @order, item: @item_1, price: 1, quantity: 1, created_at: yesterday, updated_at: yesterday)
       @oi_2 = create(:fulfilled_order_item, order: @order, item: @item_2, price: 2, quantity: 1, created_at: yesterday, updated_at: 2.hours.ago)
 
       @merchant = create(:merchant)
       @i1, @i2 = create_list(:item, 2, user: @merchant)
-      @o1, @o2 = create_list(:order, 2)
-      @o3 = create(:shipped_order)
-      @o4 = create(:cancelled_order)
+      # @o1, @o2 = create_list(:order, 2)
+      @o1 = Order.create(user: user, address: @address, status: "pending")
+      @o2 = Order.create(user: user, address: @address, status: "pending")
+
+      # @o3 = create(:shipped_order)
+      @o3 = Order.create(user: user, address: @address, status: "cancelled")
+      # @o4 = create(:cancelled_order)
+      @o4 = Order.create(user: user, address: @address, status: "cancelled")
       create(:order_item, order: @o1, item: @i1, quantity: 1, price: 2)
       create(:order_item, order: @o1, item: @i2, quantity: 2, price: 2)
       create(:order_item, order: @o2, item: @i2, quantity: 4, price: 2)
@@ -146,7 +191,11 @@ RSpec.describe Order, type: :model do
       merchant1 = create(:merchant)
       merchant2 = create(:merchant)
       user = create(:user)
-      order = create(:order, user: user)
+
+      @address = Address.create(address: "1211 west 24th ave", city: "Denver", state: "CO", zip: "21112", nickname: "work", user: user)
+
+      # order = create(:order, user: user)
+      order = Order.create(user: user, address: @address, status: "pending")
       item1 = create(:item, user: merchant1)
       item2 = create(:item, user: merchant2)
       item3 = create(:item, user: merchant1)

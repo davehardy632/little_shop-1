@@ -27,7 +27,9 @@ RSpec.describe 'Profile Orders page', type: :feature do
     describe 'should show information about each order when I do have orders' do
       before :each do
         yesterday = 1.day.ago
-        @order = create(:order, user: @user, created_at: yesterday)
+
+        @address = @user.addresses.create(address: "1221 west 23rd ave", city: "Denver", state: "CO", zip: "21112")
+        @order = Order.create(user: @user, address: @address, status: "pending", created_at: yesterday)
         @oi_1 = create(:order_item, order: @order, item: @item_1, price: 1, quantity: 1, created_at: yesterday, updated_at: yesterday)
         @oi_2 = create(:fulfilled_order_item, order: @order, item: @item_2, price: 2, quantity: 1, created_at: yesterday, updated_at: 2.hours.ago)
       end
@@ -55,7 +57,8 @@ RSpec.describe 'Profile Orders page', type: :feature do
     describe 'should show a single order show page' do
       before :each do
         yesterday = 1.day.ago
-        @order = create(:order, user: @user, created_at: yesterday)
+        @address = @user.addresses.create(address: "1221 west 23rd ave", city: "Denver", state: "CO", zip: "21112")
+        @order = Order.create(user: @user, address: @address, status: "pending", created_at: yesterday)
         @oi_1 = create(:order_item, order: @order, item: @item_1, price: 1, quantity: 3, created_at: yesterday, updated_at: yesterday)
         @oi_2 = create(:fulfilled_order_item, order: @order, item: @item_2, price: 2, quantity: 5, created_at: yesterday, updated_at: 2.hours.ago)
       end

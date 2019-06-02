@@ -21,8 +21,12 @@ RSpec.describe "merchant index workflow", type: :feature do
 
         within("#merchant-#{@merchant_1.id}") do
           expect(page).to have_content(@merchant_1.name)
-          expect(page).to have_content("#{@merchant_1.city}, #{@merchant_1.state}")
-          expect(page).to have_content("Registered Date: #{@merchant_1.created_at}")
+
+          @merchant_1.addresses.each do |address|
+          expect(page).to have_content("#{address.city}, #{address.state}")
+          expect(page).to have_content("Registered Date: #{address.created_at}")
+          end
+
           if @am_admin
             expect(page).to have_button('Disable Merchant')
           end
@@ -30,8 +34,10 @@ RSpec.describe "merchant index workflow", type: :feature do
 
         within("#merchant-#{@merchant_2.id}") do
           expect(page).to have_content(@merchant_2.name)
-          expect(page).to have_content("#{@merchant_2.city}, #{@merchant_2.state}")
-          expect(page).to have_content("Registered Date: #{@merchant_2.created_at}")
+          @merchant_1.addresses.each do |address|
+          expect(page).to have_content("#{address.city}, #{address.state}")
+          expect(page).to have_content("Registered Date: #{address.created_at}")
+          end
           if @am_admin
             expect(page).to have_button('Disable Merchant')
           end
@@ -43,7 +49,10 @@ RSpec.describe "merchant index workflow", type: :feature do
           end
         else
           expect(page).to_not have_content(@inactive_merchant.name)
-          expect(page).to_not have_content("#{@inactive_merchant.city}, #{@inactive_merchant.state}")
+
+          @inactive_merchant.addresses.each do |address|
+          expect(page).to_not have_content("#{address.city}, #{address.state}")
+          end
         end
       end
     end
@@ -92,12 +101,24 @@ RSpec.describe "merchant index workflow", type: :feature do
 
     describe "shows merchant statistics" do
       before :each do
-        u1 = create(:user, state: "CO", city: "Fairfield")
-        u3 = create(:user, state: "IA", city: "Fairfield")
-        u2 = create(:user, state: "OK", city: "OKC")
-        u4 = create(:user, state: "IA", city: "Des Moines")
-        u5 = create(:user, state: "IA", city: "Des Moines")
-        u6 = create(:user, state: "IA", city: "Des Moines")
+        u1 = create(:user)
+          a1 = u1.addresses.create(address: "1221 west 23rd ave", city: "Fairfield", state: "CO", zip: "21112")
+
+        u3 = create(:user)
+          a3 = u3.addresses.create(address: "1221 west 23rd ave", city: "Fairfield", state: "IA", zip: "21112")
+
+        u2 = create(:user)
+          a2 = u2.addresses.create(address: "1221 west 23rd ave", city: "OKC", state: "OK", zip: "21112")
+
+        u4 = create(:user)
+          a4 = u4.addresses.create(address: "1221 west 23rd ave", city: "Des Moines", state: "IA", zip: "21112")
+
+        u5 = create(:user)
+          a5 = u5.addresses.create(address: "1221 west 23rd ave", city: "Des Moines", state: "IA", zip: "21112")
+
+        u6 = create(:user)
+          a6 = u6.addresses.create(address: "1221 west 23rd ave", city: "Des Moines", state: "IA", zip: "21112")
+
         @m1, @m2, @m3, @m4, @m5, @m6, @m7 = create_list(:merchant, 7)
         i1 = create(:item, merchant_id: @m1.id)
         i2 = create(:item, merchant_id: @m2.id)
@@ -106,13 +127,15 @@ RSpec.describe "merchant index workflow", type: :feature do
         i5 = create(:item, merchant_id: @m5.id)
         i6 = create(:item, merchant_id: @m6.id)
         i7 = create(:item, merchant_id: @m7.id)
-        @o1 = create(:shipped_order, user: u1)
-        @o2 = create(:shipped_order, user: u2)
-        @o3 = create(:shipped_order, user: u3)
-        @o4 = create(:shipped_order, user: u1)
-        @o5 = create(:cancelled_order, user: u5)
-        @o6 = create(:shipped_order, user: u6)
-        @o7 = create(:shipped_order, user: u6)
+
+        @o1 = Order.create(user: u1, address: a1, status: "shipped")
+        @o2 = Order.create(user: u2, address: a2, status: "shipped")
+        @o3 = Order.create(user: u3, address: a3, status: "shipped")
+        @o4 = Order.create(user: u1, address: a1, status: "shipped")
+        @o5 = Order.create(user: u5, address: a5, status: "cancelled")
+        @o6 = Order.create(user: u6, address: a6, status: "shipped")
+        @o7 = Order.create(user: u6, address: a6, status: "shipped")
+
         oi1 = create(:fulfilled_order_item, item: i1, order: @o1, created_at: 5.minutes.ago)
         oi2 = create(:fulfilled_order_item, item: i2, order: @o2, created_at: 53.5.hours.ago)
         oi3 = create(:fulfilled_order_item, item: i3, order: @o3, created_at: 6.days.ago)
