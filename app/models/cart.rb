@@ -28,8 +28,9 @@ class Cart
   end
 
   def load_items
-    @contents.map do |item_id, quantity|
-      item = Item.find(item_id)
+    items = remove_coupon
+    items.map do |item_id, quantity|
+    item = Item.find(item_id)
       [item, quantity]
     end.to_h
   end
@@ -43,4 +44,23 @@ class Cart
   def subtotal(item)
     count_of(item.id) * item.price
   end
+
+  def add_coupon(coupon_id)
+    @contents["coupon_id"] = coupon_id
+  end
+
+  def remove_coupon
+    contents.except("coupon_id")
+  end
+
+  def discounted_total
+    coupon = Coupon.find(contents["coupon_id"])
+    merchant = coupon.user
+    items = remove_coupon
+    items.sum do |item_id, quantity|
+     item = Item.find(item_id)
+       item.price * quantity if item.user == merchant
+    end - coupon.discount
+  end
+
 end

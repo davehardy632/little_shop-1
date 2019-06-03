@@ -1,0 +1,20 @@
+<h1><%= @merchant.name %> Coupons</h1>
+<% if @coupons.count < 5 %>
+<h3><%= link_to "Add a Coupon", new_dashboard_coupon_path %></h3>
+<% end %>
+
+<% @coupons.each do |coupon| %>
+<div id="coupon-<%= coupon.id %>">
+  <p><%= coupon.name %></p>
+  <p>Discount <%= coupon.discount %></p>
+  <% if coupon.enabled == true %>
+  <p>Coupon is Enabled</p>
+  <%= button_to "Disable Coupon", dashboard_disable_coupon_path(coupon), method: :patch %>
+  <% elsif coupon.enabled == false %>
+  <p>Coupon is Disabled</p>
+  <%= button_to "Enable Coupon", dashboard_enable_coupon_path(coupon), method: :patch  %>
+  <% end %>
+  <%= button_to "Delete Coupon", dashboard_coupon_path(coupon), method: :delete %>
+  <%= link_to "Edit Coupon", edit_dashboard_coupon_path(coupon) %>
+</div>
+<% end %>

@@ -14,6 +14,9 @@ class User < ApplicationRecord
   # as a merchant
   has_many :items, foreign_key: 'merchant_id'
 
+  # as a merchant and user
+  has_many :coupons
+
   def active_items
     items.where(active: true).order(:name)
   end

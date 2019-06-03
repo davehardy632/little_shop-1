@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   patch '/cart/items/:id', to: 'cart#decrement'
   delete '/cart', to: 'cart#destroy', as: :empty_cart
   delete '/cart/items/:id', to: 'cart#remove_item', as: :remove_item
+  post '/cart/coupons', to: 'cart#add_coupon', as: :add_coupon
 
   resources :items, only: [:index, :show]
   resources :merchants, only: [:index]
@@ -36,6 +37,9 @@ Rails.application.routes.draw do
     patch '/items/:id/disable', to: 'items#disable', as: 'disable_item'
     put '/order_items/:order_item_id/fulfill', to: 'orders#fulfill', as: 'fulfill_order_item'
     resources :orders, only: [:show]
+    resources :coupons, only: [:index, :new, :create, :edit, :update, :destroy]
+    patch '/coupons/:id/disable', to: 'coupons#disable', as: 'disable_coupon'
+    patch '/coupons/:id/enable', to: 'coupons#enable', as: 'enable_coupon'
   end
 
   namespace :admin do
