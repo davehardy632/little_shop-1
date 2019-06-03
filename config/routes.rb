@@ -38,6 +38,7 @@ Rails.application.routes.draw do
     resources :orders, only: [:show]
     resources :coupons, only: [:index, :new, :create, :edit, :update, :destroy]
     patch '/coupons/:id/disable', to: 'coupons#disable', as: 'disable_coupon'
+    patch '/coupons/:id/enable', to: 'coupons#enable', as: 'enable_coupon'
   end
 
   namespace :admin do
