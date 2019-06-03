@@ -33,5 +33,36 @@ describe "Users can use coupons when checking out" do
 
       expect(page).to have_content("Discounted Total: $4.00")
     end
+
+    it "Discount is only applied to that merchants items" do
+      merchant_2 = create(:merchant)
+        item_4 = create(:item, price: 3.00, user: merchant_2)
+
+      merchant_3 = create(:merchant)
+        item_5 = create(:item, price: 5.00, user: merchant_3)
+
+        visit items_path
+
+        within("#item-#{item_4.id}") do
+          click_on "Add to Cart"
+          click_on "Add to Cart"
+          click_on "Add to Cart"
+        end
+
+        visit items_path
+
+        within("#item-#{item_5.id}") do
+          click_on "Add to Cart"
+          click_on "Add to Cart"
+          click_on "Add to Cart"
+        end
+
+      fill_in 'Name', with: @coupon.name
+      click_on "Add Coupon"
+
+      expect(page).to have_content("#{@coupon.name} has been added to your order")
+
+      expect(page).to have_content("Discounted Total: $28.00")
+    end
   end
 end

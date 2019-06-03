@@ -53,14 +53,38 @@ class Cart
     contents.except("coupon_id")
   end
 
-  def discounted_total
+  def merchant_items
     coupon = Coupon.find(contents["coupon_id"])
     merchant = coupon.user
     items = remove_coupon
-    items.sum do |item_id, quantity|
-     item = Item.find(item_id)
-       item.price * quantity if item.user == merchant
-    end - coupon.discount
+    other_items = Hash.new
+    merchant_items = Hash.new(0)
+      items.each do |item_id, quantity|
+      item = Item.find(item_id)
+      if item.user == merchant
+        merchant_items[item_id] = quantity
+      else
+        other_items[item_id] = quantity
+      end
+    end
+    merchant_items
   end
 
+  def merchant_total
+    discount = merchant_items
+    full_price = total
+    discount.sum do |item_id, quantity|
+      item = Item.find(item_id)
+      item.price * quantity
+    end
+  end
+
+  def discounted_total
+    coupon = Coupon.find(contents["coupon_id"])
+    discount = coupon.discount
+    after_discount = merchant_total - discount
+    total_difference = total - merchant_total
+    total_discount = total_difference + after_discount
+    total_discount
+  end
 end
