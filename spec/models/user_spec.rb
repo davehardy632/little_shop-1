@@ -61,7 +61,7 @@ RSpec.describe User, type: :model do
       @u2 = User.create(name: "user 2", email: "user2@gmail.com", password: "password2")
       @address_2 = @u2.addresses.create(address: "1441 north 30th ave", city: "Tulsa", state: "OK", zip: "22332")
 
-      # @u3 = create(:user, state: "IA", city: "Anywhere")
+      @u3 = create(:user, state: "IA", city: "Anywhere")
       @u3 = User.create(name: "user 3", email: "user3@gmail.com", password: "password3")
       @address_3 = @u3.addresses.create(address: "1155 east 22nd ave", city: "Anywhere", state: "IA", zip: "11312")
 

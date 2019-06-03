@@ -24,5 +24,11 @@ describe "Merchant Can Delete Coupons" do
       expect(page).to_not have_content(@coupon_1.name)
       expect(page).to_not have_content(@coupon_1.discount)
     end
+
+    # it "Merchant cannot delete a coupon that has been used in an order" do
+    #
+    #
+    # 
+    # end
   end
 end

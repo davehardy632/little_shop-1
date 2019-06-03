@@ -35,4 +35,11 @@ class CartController < ApplicationController
     flash[:success] = "#{item.name} has been removed from your cart."
     redirect_to cart_path
   end
+
+  def add_coupon
+    coupon = Coupon.find_by(name: params[:name])
+    session[:coupon_id] = coupon.id
+    binding.pry
+    merchant = User.find(session[:cart].keys.first)
+  end
 end
