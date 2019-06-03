@@ -54,26 +54,21 @@ RSpec.describe User, type: :model do
 
   describe 'instance methods' do
     before :each do
-      # @u1 = create(:user, state: "CO", city: "Anywhere")
       @u1 = User.create(name: "user", email: "user@gmail.com", password: "password")
       @address_1 = @u1.addresses.create(address: "1121 west 32nd ave", city: "Anywhere", state: "CO", zip: "22122")
-      # @u2 = create(:user, state: "OK", city: "Tulsa")
+
       @u2 = User.create(name: "user 2", email: "user2@gmail.com", password: "password2")
       @address_2 = @u2.addresses.create(address: "1441 north 30th ave", city: "Tulsa", state: "OK", zip: "22332")
 
-      @u3 = create(:user, state: "IA", city: "Anywhere")
       @u3 = User.create(name: "user 3", email: "user3@gmail.com", password: "password3")
       @address_3 = @u3.addresses.create(address: "1155 east 22nd ave", city: "Anywhere", state: "IA", zip: "11312")
 
-      # u4 = create(:user, state: "IA", city: "Des Moines")
       u4 = User.create(name: "user 4", email: "user4@gmail.com", password: "password4")
       address_4 = u4.addresses.create(address: "1521 west 44th ave", city: "Des Moines", state: "IA", zip: "24532")
 
-      # u5 = create(:user, state: "IA", city: "Des Moines")
       u5 = User.create(name: "user 5", email: "user5@gmail.com", password: "password5")
       address_5 = u5.addresses.create(address: "1321 west 11th ave", city: "Des Moines", state: "IA", zip: "22652")
 
-      # u6 = create(:user, state: "IA", city: "Des Moines")
       u6 = User.create(name: "user 6", email: "user6@gmail.com", password: "password6")
       address_6 = u6.addresses.create(address: "1661 west 26th ave", city: "Des Moines", state: "IA", zip: "56332")
 

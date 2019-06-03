@@ -38,8 +38,8 @@ class CartController < ApplicationController
 
   def add_coupon
     coupon = Coupon.find_by(name: params[:name])
-    session[:coupon_id] = coupon.id
-    binding.pry
-    merchant = User.find(session[:cart].keys.first)
+    cart.add_coupon(coupon.id)
+    flash[:message] = "#{coupon.name} has been added to your order"
+    redirect_to cart_path
   end
 end

@@ -3,9 +3,9 @@ require 'rails_helper'
 describe "Users can use coupons when checking out" do
   before :each do
     @merchant = create(:merchant)
-      @item_1 = create(:item, price: 2.00)
-      @item_2 = create(:item, price: 3.00)
-      @item_3 = create(:item, price: 3.00)
+      @item_1 = create(:item, price: 2.00, user: @merchant)
+      @item_2 = create(:item, price: 3.00, user: @merchant)
+      @item_3 = create(:item, price: 3.00, user: @merchant)
 
       @coupon = @merchant.coupons.create(name: "Coupon 1", discount: 2.00)
 
@@ -29,7 +29,7 @@ describe "Users can use coupons when checking out" do
       fill_in 'Name', with: @coupon.name
       click_on "Add Coupon"
 
-      expect(page).to have_content("#{@coupon_1.name} has been added to your order")
+      expect(page).to have_content("#{@coupon.name} has been added to your order")
 
       expect(page).to have_content("Discounted Total: $4.00")
     end

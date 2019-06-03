@@ -14,13 +14,14 @@
       or <%= link_to "log in", login_path %> to check out.</p>
   <% end %>
   <%= button_to "Empty Cart", empty_cart_path, method: :delete %>
-
   <%= form_tag add_coupon_path do %>
   <%= label_tag :name %>
   <%= text_field_tag :name %>
   <%= submit_tag "Add Coupon" %>
   <% end %>
-
+  <% if cart.contents.include?("coupon_id") %>
+  <h3>Discounted Total: <%= number_to_currency(cart.discounted_total) %></h3>
+  <% end %>
   <ul id="items">
     <% cart.items.each do |item, quantity| %>
       <li id="item-<%= item.id %>">
