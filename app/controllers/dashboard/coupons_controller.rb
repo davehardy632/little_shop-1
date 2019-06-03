@@ -36,6 +36,19 @@ class Dashboard::CouponsController < Dashboard::BaseController
     end
   end
 
+  def destroy
+    @coupon = Coupon.find(params[:id])
+    @coupon.destroy
+    redirect_to dashboard_coupons_path
+  end
+
+  def disable
+    @coupon = Coupon.find(params[:id])
+    @coupon.update_column(:enabled, false)
+    flash[:message] = "Coupon has been disabled"
+    redirect_to dashboard_coupons_path
+  end
+
   private
 
   def coupon_params
