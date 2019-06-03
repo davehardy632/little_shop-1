@@ -1,0 +1,7 @@
+<%= form_for [@merchant, @coupon], url: dashboard_coupons_path do |f| %>
+<%= f.label :name %>
+<%= f.text_field :name %>
+<%= f.label :discount %>
+<%= f.number_field :discount %>
+<%= f.submit %>
+<% end %>

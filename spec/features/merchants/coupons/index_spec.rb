@@ -17,7 +17,7 @@ describe "Merchant Coupons" do
 
       expect(page).to have_link("My Coupons")
       click_link "My Coupons"
-
+      
       expect(current_path).to eq(dashboard_coupons_path)
 
       within("#coupon-#{@coupon_1.id}") do

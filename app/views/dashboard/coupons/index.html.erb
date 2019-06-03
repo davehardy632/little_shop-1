@@ -1,0 +1,9 @@
+<h1><%= @merchant.name %> Coupons</h1>
+<h3><%= link_to "Add a Coupon", new_dashboard_coupon_path %></h3>
+
+<% @coupons.each do |coupon| %>
+<div id="coupon-<%= coupon.id %>">
+  <p><%= coupon.name %></p>
+  <p>Discount <%= coupon.discount %></p>
+</div>
+<% end %>
