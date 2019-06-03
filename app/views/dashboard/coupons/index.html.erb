@@ -5,5 +5,6 @@
 <div id="coupon-<%= coupon.id %>">
   <p><%= coupon.name %></p>
   <p>Discount <%= coupon.discount %></p>
+  <%= link_to "Edit Coupon", edit_dashboard_coupon_path(coupon) %>
 </div>
 <% end %>
