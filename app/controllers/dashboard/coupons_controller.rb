@@ -12,13 +12,18 @@ class Dashboard::CouponsController < Dashboard::BaseController
 
   def create
     @merchant = current_user
-    @coupon = Coupon.new(coupon_params)
-    @merchant.coupons << @coupon
-    if @coupon.save
-      flash[:message] = "New Coupon Added!"
+    if @merchant.coupons.count > 4
+      flash[:message] = "#{@merchant.name} cannot have more than five coupons"
       redirect_to dashboard_coupons_path
     else
-      render :new
+      @coupon = Coupon.new(coupon_params)
+      @merchant.coupons << @coupon
+      if @coupon.save
+        flash[:message] = "New Coupon Added!"
+        redirect_to dashboard_coupons_path
+      else
+        render :new
+      end
     end
   end
 

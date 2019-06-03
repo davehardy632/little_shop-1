@@ -15,6 +15,7 @@ RSpec.describe User, type: :model do
     # as merchant
     it { should have_many :items }
     it { should have_many :addresses }
+    it { should have_many :coupons }
   end
 
   describe 'roles' do

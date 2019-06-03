@@ -40,7 +40,7 @@ describe "Merchant Can enable and disable Coupons" do
 
     @coupon_3.reload
     expect(@coupon_3.enabled).to eq(true)
-save_and_open_page
+
     within("#coupon-#{@coupon_3.id}") do
       expect(page).to have_content("Coupon is Enabled")
       expect(page).to have_button("Disable Coupon")
