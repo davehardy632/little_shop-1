@@ -82,9 +82,18 @@ class Cart
   def discounted_total
     coupon = Coupon.find(contents["coupon_id"])
     discount = coupon.discount
-    after_discount = merchant_total - discount
+    if merchant_total >= discount
+      after_discount = merchant_total - discount
+    else
+      after_discount = 0
+    end
+    after_discount
     total_difference = total - merchant_total
     total_discount = total_difference + after_discount
-    total_discount
+    if total_discount < 0
+      return 0
+    else
+      return total_discount
+    end
   end
 end
