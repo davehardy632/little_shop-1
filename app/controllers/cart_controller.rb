@@ -38,8 +38,17 @@ class CartController < ApplicationController
 
   def add_coupon
     coupon = Coupon.find_by(name: params[:name])
-    cart.add_coupon(coupon.id)
-    flash[:message] = "#{coupon.name} has been added to your order"
-    redirect_to cart_path
+    if current_user.orders == []
+      cart.add_coupon(coupon.id)
+      flash[:message] = "#{coupon.name} has been added to your order"
+      redirect_to cart_path
+    elsif current_user.orders != [] && current_user.include_coupon?(coupon.id)
+      flash[:message] = "Coupons cannot be used twice, you have already used this coupon"
+      redirect_to cart_path
+    elsif current_user.orders != [] && current_user.include_coupon?(coupon.id) == false
+      cart.add_coupon(coupon.id)
+      flash[:message] = "#{coupon.name} has been added to your order"
+      redirect_to cart_path
+    end
   end
 end

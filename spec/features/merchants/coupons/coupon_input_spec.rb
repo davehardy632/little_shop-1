@@ -30,7 +30,6 @@ describe "Users can use coupons when checking out" do
       click_on "Add Coupon"
 
       expect(page).to have_content("#{@coupon.name} has been added to your order")
-
       expect(page).to have_content("Discounted Total: $4.00")
     end
 

@@ -161,4 +161,13 @@ class User < ApplicationRecord
         .order('order_count DESC')
         .limit(limit)
   end
+
+  def include_coupon?(coupon_id)
+    self.orders.find do |order|
+      order.coupon_id == coupon_id
+    end if coupon_id
+        return true
+      else
+        return false
+  end
 end
