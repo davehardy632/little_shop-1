@@ -1,28 +1,44 @@
 require 'rails_helper'
 
-describe "Users can use coupons when checking out" do
+describe "User checkout with a coupon" do
   before :each do
     @merchant = create(:merchant)
-      @item_1 = create(:item, price: 2.00, user: @merchant)
+      @item_1 = create(:item, price: 2.00, user: @merchant, inventory: 22)
       @item_2 = create(:item, price: 3.00, user: @merchant)
       @item_3 = create(:item, price: 3.00, user: @merchant)
 
-      @coupon = @merchant.coupons.create(name: "Coupon 1", discount: 2.00)
+    @merchant_2 = create(:merchant)
+      @item_4 = create(:item, price: 3.50, user: @merchant_2, inventory: 10)
+
+      @coupon = @merchant.coupons.create(name: "Coupon 1", discount: 10.00)
+      @coupon_2 = @merchant.coupons.create(name: "Coupon 2", discount: 3.00)
+      @coupon_3 = @merchant.coupons.create(name: "Coupon 3", discount: 4.00)
+      @coupon_4 = @merchant_2.coupons.create(name: "Coupon 4", discount: 6.00)
+      @coupon_5 = @merchant_2.coupons.create(name: "Coupon 5", discount: 15.00)
 
     @user = create(:user)
     login_as(@user)
     @address = @user.addresses.create(address: "123 west 32nd ave", city: "Denver", state: "CO", zip: "80102")
+
     visit items_path
 
     within("#item-#{@item_1.id}") do
       click_on "Add to Cart"
       click_on "Add to Cart"
       click_on "Add to Cart"
+      click_on "Add to Cart"
     end
 
+    visit items_path
+
+    within("#item-#{@item_2.id}") do
+      click_on "Add to Cart"
+      click_on "Add to Cart"
+    end
   end
-  describe "When a registered user checks out, they can enter the coupon name and see the discounted total on the cart show page" do
-    it "After adding items to the cart by a merchant, I can enter a coupon code/name and see the discounted total" do
+
+  describe "When a user adds a coupon to their order, and checks out, the discounted total is applied" do
+    it "the order index page displays which coupon was used" do
 
       expect(current_path).to eq(cart_path)
 
@@ -32,37 +48,24 @@ describe "Users can use coupons when checking out" do
       expect(page).to have_content("#{@coupon.name} has been added to your order")
 
       expect(page).to have_content("Discounted Total: $4.00")
-    end
 
-    it "Discount is only applied to that merchants items" do
-      merchant_2 = create(:merchant)
-        item_4 = create(:item, price: 3.00, user: merchant_2)
+      click_on "Check Out With Address: home"
 
-      merchant_3 = create(:merchant)
-        item_5 = create(:item, price: 5.00, user: merchant_3)
+      order = Order.last
 
-        visit items_path
+      expect(current_path).to eq(profile_orders_path)
 
-        within("#item-#{item_4.id}") do
-          click_on "Add to Cart"
-          click_on "Add to Cart"
-          click_on "Add to Cart"
-        end
+      within("#order-#{order.id}") do
+        expect(page).to have_content("Total Cost: 4.0")
+        expect(page).to have_content("Coupon Used: #{@coupon.name}")
+      end
 
-        visit items_path
+      visit profile_order_path(order)
 
-        within("#item-#{item_5.id}") do
-          click_on "Add to Cart"
-          click_on "Add to Cart"
-          click_on "Add to Cart"
-        end
-
-      fill_in 'Name', with: @coupon.name
-      click_on "Add Coupon"
-
-      expect(page).to have_content("#{@coupon.name} has been added to your order")
-
-      expect(page).to have_content("Discounted Total: $28.00")
+      within("#order-#{order.id}") do
+        expect(page).to have_content("Coupon Used: #{@coupon.name}")
+        expect(page).to have_content("Total Cost: 4.0")
+      end
     end
   end
 end

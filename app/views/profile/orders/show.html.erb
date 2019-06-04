@@ -3,8 +3,15 @@
   <p>Created: <%= @order.created_at %></p>
   <p>Last Update: <%= @order.updated_at %></p>
   <p>Status: <%= @order.status %></p>
+  <% if @order.coupon %>
+  <p>Coupon Used: <%= @order.coupon.name %></p>
+  <% end %>
   <p>Item Count: <%= @order.total_item_count %></p>
+  <% if @order.discounted_price %>
+  <p>Total Cost: <%= @order.discounted_price %></p>
+  <% else %>
   <p>Total Cost: <%= number_to_currency(@order.total_cost) %></p>
+  <% end %>
   <% if @order.status == 'pending' || @order.status == 'packaged' %>
   <p><%= button_to 'Cancel Order', profile_order_path(@order), method: :delete %></p>
   <% end %>
