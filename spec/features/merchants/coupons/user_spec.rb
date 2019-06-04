@@ -50,5 +50,26 @@ describe "Coupons can be used by multiple users but only once per user" do
     expect(current_path).to eq(cart_path)
     expect(page).to have_content("Coupons cannot be used twice, you have already used this coupon")
     expect(page).to have_content("Total: $12.00")
+
+    click_on "Log out"
+
+    expect(current_path).to eq(root_path)
+
+    login_as(@user_2)
+
+    visit items_path
+
+    within("#item-#{@item_1.id}") do
+      click_on "Add to Cart"
+      click_on "Add to Cart"
+      click_on "Add to Cart"
+      click_on "Add to Cart"
+    end
+
+    fill_in 'Name', with: @coupon.name
+    click_on "Add Coupon"
+
+    expect(page).to have_content("#{@coupon.name} has been added to your order")
+    expect(page).to have_content("Discounted Total: $7.00")
   end
 end

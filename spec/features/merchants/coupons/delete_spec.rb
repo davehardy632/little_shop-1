@@ -6,9 +6,14 @@ describe "Merchant Can Delete Coupons" do
     @merchant = create(:merchant)
     login_as(@merchant)
 
+    @user = create(:user)
+      @address = @user.addresses.create(address: "1234 west 27th st", city: "Denver", state:"CO", zip: "80104")
+
     @coupon_1 = @merchant.coupons.create(name: "Coupon 1", discount: 2.00, enabled: true)
     @coupon_2 = @merchant.coupons.create(name: "Coupon 2", discount: 3.00, enabled: true)
     @coupon_3 = @merchant.coupons.create(name: "Coupon 3", discount: 4.00, enabled: true)
+
+      @order = Order.create!(user: @user, address: @address, status: "shipped", coupon: @coupon_3)
 
     visit dashboard_coupons_path
   end
@@ -25,10 +30,11 @@ describe "Merchant Can Delete Coupons" do
       expect(page).to_not have_content(@coupon_1.discount)
     end
 
-    # it "Merchant cannot delete a coupon that has been used in an order" do
-    #
-    #
-    # 
-    # end
+    it "A merchant cannot delete a coupon that has been used" do
+
+      within("#coupon-#{@coupon_3.id}") do
+        expect(page).to_not have_button "Delete Coupon"
+      end
+    end
   end
 end
