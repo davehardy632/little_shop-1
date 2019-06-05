@@ -20,4 +20,5 @@ class Address < ApplicationRecord
       return false
     end
   end
+
 end

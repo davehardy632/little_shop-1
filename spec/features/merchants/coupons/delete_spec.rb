@@ -25,7 +25,7 @@ describe "Merchant Can Delete Coupons" do
       end
 
       expect(current_path).to eq(dashboard_coupons_path)
-
+      expect(page).to have_content("Coupon Deleted")
       expect(page).to_not have_content(@coupon_1.name)
       expect(page).to_not have_content(@coupon_1.discount)
     end

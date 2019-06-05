@@ -5,7 +5,7 @@
   <h3>Total: <%= number_to_currency(cart.total) %></h3>
   <% if current_user && current_user.addresses != [] %>
       <% current_user.addresses.each do |address| %>
-      <%= button_to "Check Out With Address: #{address.nickname}", profile_orders_path(address), method: :post %>
+      <%= button_to "Check Out With Address: #{address.nickname} address at #{address.address}", profile_orders_path(address), method: :post %>
       <% end %>
   <% elsif current_user && current_user.addresses == [] %>
     <p>You must <%= link_to "Add a new Address", new_profile_address_path %> to checkout</p>

@@ -38,5 +38,32 @@ describe "Merchant Can Edit Coupons" do
         expect(page).to have_content("Discount #{new_discount}")
       end
     end
+
+    it "When updating/ changing a coupon, all fields must be present" do
+      coupon = @merchant.coupons.create(name: "medium coupon", discount: 4.00, enabled: true)
+
+      within("#coupon-#{@coupon_1.id}") do
+        click_link "Edit Coupon"
+      end
+
+      fill_in "Name", with: ""
+      fill_in "Discount", with: 5.00
+      click_on "Update Coupon"
+
+
+      expect(page).to have_content("Name can't be blank")
+
+      visit dashboard_coupons_path
+
+      within("#coupon-#{@coupon_1.id}") do
+        click_link "Edit Coupon"
+      end
+
+      fill_in "Name", with: "name name"
+      fill_in "Discount", with: ""
+      click_on "Update Coupon"
+
+      expect(page).to have_content("Discount can't be blank")
+    end
   end
 end

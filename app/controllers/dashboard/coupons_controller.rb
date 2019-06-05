@@ -46,10 +46,11 @@ class Dashboard::CouponsController < Dashboard::BaseController
   def destroy
     @coupon = Coupon.find(params[:id])
     if @coupon.orders.any?
-      flash[:message] = "Cannot delete #{@coupon.name}as it has already been used"
+      flash[:message] = "Cannot delete a coupon that has been used"
       redirect_to dashboard_coupons_path
     else
       @coupon.destroy
+      flash[:message] = "Coupon Deleted"
       redirect_to dashboard_coupons_path
     end
   end
