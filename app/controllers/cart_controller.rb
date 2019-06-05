@@ -38,8 +38,20 @@ class CartController < ApplicationController
 
   def add_coupon
     coupon = Coupon.find_by(name: params[:name])
-    cart.add_coupon(coupon.id)
-    flash[:message] = "#{coupon.name} has been added to your order"
-    redirect_to cart_path
+    if current_user.orders.any? == false && coupon.nil? == false
+      cart.add_coupon(coupon.id)
+      flash[:message] = "#{coupon.name} has been added to your order"
+      redirect_to cart_path
+    elsif coupon.nil? == false && current_user.used_coupon?(coupon.id)
+      flash[:message] = "You have already used this coupon"
+      redirect_to cart_path
+    elsif coupon.nil? == false
+      cart.add_coupon(coupon.id)
+      flash[:message] = "#{coupon.name} has been added to your order"
+      redirect_to cart_path
+    elsif coupon.nil?
+      flash[:message] = "Coupon does not exist"
+      redirect_to cart_path
+    end
   end
 end

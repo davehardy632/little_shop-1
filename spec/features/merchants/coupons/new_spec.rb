@@ -4,7 +4,7 @@ describe "Merchant can add coupons to coupon index page" do
   before :each do
     @merchant = create(:merchant)
     login_as(@merchant)
-
+    @coupon = @merchant.coupons.create(name: "Unique Coupon", discount: 3.00)
     visit dashboard_coupons_path
 
     click_link "Add a Coupon"
@@ -27,6 +27,16 @@ describe "Merchant can add coupons to coupon index page" do
         expect(page).to have_content("coupon 123")
         expect(page).to have_content("Discount #{coupon.discount}")
       end
+    end
+
+    it "Coupon names are unique and if the same name is entered, there is a flash message indicator" do
+
+      fill_in "Name", with: "Unique Coupon"
+      fill_in 'Discount', with: 2.00
+      click_on "Create Coupon"
+
+      expect(current_path).to eq(dashboard_coupons_path)
+      expect(page).to have_content("Name has already been taken")
     end
   end
 end

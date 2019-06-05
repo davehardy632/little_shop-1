@@ -51,4 +51,12 @@ class Profile::OrdersController < ApplicationController
     flash[:success] = "Your order has been created!"
     redirect_to profile_orders_path
   end
+
+  def change_address
+    order = Order.find(params[:format])
+    address = Address.find(params[:address_id])
+    order.update_column(:address_id, address.id)
+    flash[:message] = "Shipping Address Changed to #{address.address}"
+    redirect_to profile_orders_path
+  end
 end

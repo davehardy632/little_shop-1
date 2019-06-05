@@ -37,5 +37,29 @@ describe "User can add a new address to their profile" do
         expect(page).to have_content("Other")
       end
     end
+
+    it "When the user tries to add a new address without required fields, they are directed back and see a descriptive flash message" do
+
+      visit profile_addresses_path
+
+      click_link "Add a new Address"
+
+      expect(current_path).to eq(new_profile_address_path)
+
+      fill_in "Address", with: ""
+      fill_in "City", with: ""
+      fill_in "State", with: ""
+      fill_in "Zip", with: ""
+      fill_in "Nickname", with: ""
+      click_on "Create Address"
+
+      expect(current_path).to eq(profile_addresses_path)
+
+      expect(page).to have_content("Address can't be blank")
+      expect(page).to have_content("City can't be blank")
+      expect(page).to have_content("State can't be blank")
+      expect(page).to have_content("Zip can't be blank")
+      expect(page).to have_content("Nickname home")
+    end
   end
 end

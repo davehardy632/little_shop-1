@@ -101,5 +101,24 @@ RSpec.describe Cart do
         expect(@cart.count_of(2)).to eq(1)
       end
     end
+
+    describe "#discounted_total" do
+      before :each do
+      @merchant = create(:merchant)
+        @item_1 = create(:item, price: 2.00, user: @merchant, inventory: 22)
+        @item_2 = create(:item, price: 3.00, user: @merchant)
+        @item_3 = create(:item, price: 3.00, user: @merchant)
+        @coupon = @merchant.coupons.create(name: "Coupon 1", discount: 10.00)
+        @user = create(:user)
+        @address = @user.addresses.create(address: "123 west 32nd ave", city: "Denver", state: "CO", zip: "80102")
+
+        @new_cart = Cart.new({"#{@item_1.id}" => 3 })
+        @new_cart.add_coupon(@coupon.id)
+      end
+      it "calculates total after adding a coupon" do
+
+        expect(@new_cart.discounted_total).to eq(0)
+      end
+    end
   end
 end

@@ -9,13 +9,13 @@ class User < ApplicationRecord
   # as a consumer
   has_many :orders
   has_many :order_items, through: :orders
-  has_many :addresses
+  has_many :addresses, dependent: :destroy
 
   # as a merchant
   has_many :items, foreign_key: 'merchant_id'
 
   # as a merchant and user
-  has_many :coupons
+  has_many :coupons, dependent: :destroy
 
   def active_items
     items.where(active: true).order(:name)
@@ -160,5 +160,11 @@ class User < ApplicationRecord
         .select('addresses.city, addresses.state, count(orders.id) AS order_count')
         .order('order_count DESC')
         .limit(limit)
+  end
+
+  def used_coupon?(coupon_id)
+    self.orders.any? do |order|
+      order.coupon_id == coupon_id
+    end
   end
 end

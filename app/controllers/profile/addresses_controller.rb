@@ -18,6 +18,7 @@ class Profile::AddressesController < ApplicationController
       flash[:message] = "Your address at #{@address.address} has been saved"
       redirect_to profile_addresses_path
     else
+      flash[:danger] = @address.errors.full_messages
       render :new
     end
   end
@@ -40,9 +41,14 @@ class Profile::AddressesController < ApplicationController
 
   def destroy
     @address = Address.find(params[:id])
-    @address.delete
-    flash[:message] = "Address has been deleted"
-    redirect_to profile_addresses_path
+    if @address.orders.any? == true
+      flash[:message] = "Address is active on a pending order"
+      redirect_to profile_addresses_path
+    else
+      @address.destroy
+      flash[:message] = "Address has been deleted"
+      redirect_to profile_addresses_path
+    end
   end
 
   private

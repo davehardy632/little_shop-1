@@ -22,6 +22,7 @@ class Dashboard::CouponsController < Dashboard::BaseController
         flash[:message] = "New Coupon Added!"
         redirect_to dashboard_coupons_path
       else
+        flash[:danger] = @coupon.errors.full_messages
         render :new
       end
     end
@@ -37,14 +38,21 @@ class Dashboard::CouponsController < Dashboard::BaseController
       flash[:message] = "Coupon has been updated"
       redirect_to dashboard_coupons_path
     else
+      flash[:danger] = @coupon.errors.full_messages
       render :edit
     end
   end
 
   def destroy
     @coupon = Coupon.find(params[:id])
-    @coupon.destroy
-    redirect_to dashboard_coupons_path
+    if @coupon.orders.any?
+      flash[:message] = "Cannot delete a coupon that has been used"
+      redirect_to dashboard_coupons_path
+    else
+      @coupon.destroy
+      flash[:message] = "Coupon Deleted"
+      redirect_to dashboard_coupons_path
+    end
   end
 
   def disable

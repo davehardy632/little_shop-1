@@ -14,7 +14,9 @@
   <p>Coupon is Disabled</p>
   <%= button_to "Enable Coupon", dashboard_enable_coupon_path(coupon), method: :patch  %>
   <% end %>
+  <% unless coupon.orders.any? %>
   <%= button_to "Delete Coupon", dashboard_coupon_path(coupon), method: :delete %>
+  <% end %>
   <%= link_to "Edit Coupon", edit_dashboard_coupon_path(coupon) %>
 </div>
 <% end %>

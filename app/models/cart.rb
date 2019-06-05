@@ -7,7 +7,8 @@ class Cart
   end
 
   def total_item_count
-    @contents.values.sum
+    @items = remove_coupon
+    @items.values.sum
   end
 
   def add_item(item_id)
