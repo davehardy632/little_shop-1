@@ -51,4 +51,8 @@ class Profile::OrdersController < ApplicationController
     flash[:success] = "Your order has been created!"
     redirect_to profile_orders_path
   end
+
+  def change_address
+    binding.pry
+  end
 end

@@ -1,6 +1,6 @@
 class Order < ApplicationRecord
   belongs_to :user
-  belongs_to :address
+  belongs_to :address, dependent: :destroy
   belongs_to :coupon, optional: true, dependent: :destroy
   has_many :order_items
   has_many :items, through: :order_items

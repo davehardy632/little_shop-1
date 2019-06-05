@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   patch '/profile/edit', to: 'users#update'
   namespace :profile do
     resources :orders, only: [:index, :show, :destroy, :create]
+    patch '/profile/orders/:address_id', to: 'profile/orders#change_address', as: :change_address
     resources :addresses, only: [:index, :new, :create, :edit, :update, :destroy]
   end
 

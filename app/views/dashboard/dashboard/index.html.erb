@@ -5,7 +5,7 @@
     <h5 class="card-title"><%= @merchant.name %></h5>
     <p>Role: <%= @merchant.role %></p>
     <p>Email: <%= @merchant.email %></p>
-    <%= @merchant.addresses.each do |address| %>
+    <% @merchant.addresses.each do |address| %>
     <p>Address: <%= address.address %></p>
     <p>City: <%= address.city %></p>
     <p>State: <%= address.state %></p>
