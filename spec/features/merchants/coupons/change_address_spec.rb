@@ -25,6 +25,8 @@ describe "User can change shipping address if the order is still pending" do
       click_on "Change Shipping to: home address at 1221 west 12th ave"
     end
 
+    @order.reload
+
     expect(@order.address).to eq(@address_3)
   end
 end

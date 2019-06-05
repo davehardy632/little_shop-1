@@ -22,6 +22,7 @@ class Dashboard::CouponsController < Dashboard::BaseController
         flash[:message] = "New Coupon Added!"
         redirect_to dashboard_coupons_path
       else
+        flash[:danger] = @coupon.errors.full_messages
         render :new
       end
     end
@@ -37,6 +38,7 @@ class Dashboard::CouponsController < Dashboard::BaseController
       flash[:message] = "Coupon has been updated"
       redirect_to dashboard_coupons_path
     else
+      flash[:danger] = @coupon.errors.full_messages
       render :edit
     end
   end

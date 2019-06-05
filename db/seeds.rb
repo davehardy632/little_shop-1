@@ -22,9 +22,9 @@ merchant_2 = create(:merchant, name: "Merchant 2", email: "merchant2email@gmail.
     item_2 = create(:item, price: 3.00, user: merchant_2, inventory: 10)
     item_3 = create(:item, price: 3.00, user: merchant_2, inventory: 15)
     item_4 = create(:item, price: 300.00, user: merchant_2, inventory: 15)
-      coupon = merchant_2.coupons.create(name: "Coupon 1", discount: 10.00)
-      coupon_2 = merchant_2.coupons.create(name: "Coupon 2", discount: 3.00)
-      coupon_3 = merchant_2.coupons.create(name: "Coupon 3", discount: 3.00)
+      coupon = merchant_2.coupons.create!(name: "Coupon 1", discount: 10.00)
+      coupon_2 = merchant_2.coupons.create!(name: "Coupon 2", discount: 3.00)
+      coupon_3 = merchant_2.coupons.create!(name: "Coupon 3", discount: 3.00)
 
       user = create(:user, name: "User 1", email: "user1email@gmail.com", password: "password")
       user_address = user.addresses.create(address: "1121 user way", city: "Boston", state: "MA", zip: "50102")

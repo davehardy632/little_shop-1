@@ -53,6 +53,10 @@ class Profile::OrdersController < ApplicationController
   end
 
   def change_address
-    binding.pry
+    order = Order.find(params[:format])
+    address = Address.find(params[:address_id])
+    order.update_column(:address_id, address.id)
+    flash[:message] = "Shipping Address Changed to #{address.address}"
+    redirect_to profile_orders_path
   end
 end

@@ -18,6 +18,7 @@ class Profile::AddressesController < ApplicationController
       flash[:message] = "Your address at #{@address.address} has been saved"
       redirect_to profile_addresses_path
     else
+      flash[:danger] = @address.errors.full_messages
       render :new
     end
   end

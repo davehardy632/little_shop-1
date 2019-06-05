@@ -48,7 +48,7 @@ describe "Coupons can be used by multiple users but only once per user" do
     click_on "Add Coupon"
 
     expect(current_path).to eq(cart_path)
-    expect(page).to have_content("Coupons cannot be used twice, you have already used this coupon")
+    expect(page).to have_content("You have already used this coupon")
     expect(page).to have_content("Total: $12.00")
 
     click_on "Log out"

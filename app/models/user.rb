@@ -162,12 +162,9 @@ class User < ApplicationRecord
         .limit(limit)
   end
 
-  def include_coupon?(coupon_id)
-    self.orders.find do |order|
+  def used_coupon?(coupon_id)
+    self.orders.any? do |order|
       order.coupon_id == coupon_id
-      end if coupon_id
-        return true
-      else
-        return false
+    end
   end
 end

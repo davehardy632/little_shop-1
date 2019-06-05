@@ -24,8 +24,7 @@
             <% if order.status == "pending" %>
             <% order.user.addresses.each do |address| %>
             <% if order.address != address %>
-
-            <%= button_to "Change Shipping to: #{address.nickname} address at #{address.address}", profile_orders_path(address), method: :change_address %>
+            <%= button_to "Change Shipping to: #{address.nickname} address at #{address.address}", profile_change_address_path(address, order), method: :change_address %>
             <% end %>
             <% end %>
             <% end %>
